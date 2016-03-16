@@ -1,41 +1,42 @@
 <!DOCTYPE html>
-<html>
+<html ng-app='GitSpy'>
 
-<head>
-  <title>GitSpy</title>
-</head>
+  <head>
+    <meta charset="utf-8" />
+    <title>GitSpy</title>
+  </head>
 
-<body>
-  <!-- Nav Bar -->
-  <header>
-    <nav>
-      <ul>
-        <li><a href="#/">Dashboards</a></li>
-        <li><a href="#/add">Add Dashboard</a></li>
-        <li><a href="#/login">Login/Signup</a></li>
-        <li><a href="#/setup">Setup</a></li>
-        <li><a href="#/dashboard">Dashboard</a></li>
-      </ul>
-    </nav>
-  </header>
+  <body>
+    <!-- Nav Bar -->
+    <header>
+      <nav>
+        <ul>
+          <li><a href="#/">Dashboards</a></li>
+          <li><a href="#/add">Add Dashboard</a></li>
+          <li><a href="#/login">Login/Signup</a></li>
+          <li><a href="#/AudibleBoulders/AudibleBoulders/setup">AudibleBoulders Setup</a></li>
+          <li><a href="#/AudibleBoulders/AudibleBoulders">AudibleBoulders Dashboard</a></li>
+        </ul>
+      </nav>
+    </header>
 
-  <!-- Angular Views -->
-  <div ng-view><div>
+    <!-- Angular Views -->
+    <div ng-view><div>
 
-  <!-- Dependencies -->
-  <script src="https://code.angularjs.org/1.5.0-rc.2/angular.min.js"></script>
-  <script src="https://code.angularjs.org/1.5.0-rc.2/angular-route.min.js"></script>
-  <script src="https://code.angularjs.org/1.5.0-rc.2/angular-mocks.js"></script>
-  <script src="https://code.angularjs.org/1.5.0-rc.2/angular-cookies.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.8.3/underscore-min.js"></script>
+    <!-- Dependencies -->
+    <script src="https://code.angularjs.org/1.5.0-rc.2/angular.min.js"></script>
+    <script src="https://code.angularjs.org/1.5.0-rc.2/angular-route.min.js"></script>
+    <script src="https://code.angularjs.org/1.5.0-rc.2/angular-mocks.js"></script>
+    <script src="https://code.angularjs.org/1.5.0-rc.2/angular-cookies.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.8.3/underscore-min.js"></script>
 
-  <!-- Angular Modules -->
-  <script src="/app/services/services.js"></script>
-  <script src="/app/login/login.js"></script>
-  <script src="/app/home/home.js"></script>
-  <script src="/app/add/add.js"></script>
-  <script src="/app/setup/setup.js"></script>
-  <script src="/app/dashboard/dashboard.js"></script>
-  <script src="/app/app.js"></script>
-</body>
+    <!-- Angular Modules -->
+    <script src="app/services/services.js"></script>
+    <script src="app/login/login.js"></script>
+    <script src="app/home/home.js"></script>
+    <script src="app/add/add.js"></script>
+    <script src="app/setup/setup.js"></script>
+    <script src="app/dashboard/dashboard.js"></script>
+    <script src="app/app.js"></script>
+  </body>
 </html>

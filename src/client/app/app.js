@@ -1,6 +1,6 @@
 "use strict";
-angular.module('myApp', [
-  'add', 'dashboard', 'home', 'login', 'ngRoute', 'helper'
+angular.module('GitSpy', [
+  'add', 'dashboard', 'home', 'login', 'setup', 'ngRoute', 'helper'
 ])
 .config(['$routeProvider', function($routeProvider) {
   $routeProvider.when('/', {
@@ -13,13 +13,13 @@ angular.module('myApp', [
   });
   $routeProvider.when('/add', {
     templateUrl: 'app/add/add.html',
-    controller: 'AddCongtroller'
+    controller: 'AddController'
   });
-  $routeProvider.when('/dashboard/:orgName/:repoName', {
+  $routeProvider.when('/:orgName/:repoName', {
     templateUrl: 'app/dashboard/dashboard.html',
     controller: 'DashboardController'
   });
-  $routeProvider.when('/setup/:orgName/:repoName', {
+  $routeProvider.when('/:orgName/:repoName/setup', {
     templateUrl: 'app/setup/setup.html',
     controller: 'SetupController'
   });

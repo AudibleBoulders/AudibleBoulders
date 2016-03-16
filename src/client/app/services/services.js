@@ -11,7 +11,7 @@ helper.factory('RequestFactory', function($http) {
     })
     .then(function(res) {
       return res.data;
-    })
+    });
   };
 
   var getAllDashboards = function(userId) {
@@ -21,7 +21,7 @@ helper.factory('RequestFactory', function($http) {
     })
     .then(function(res) {
       return res.data;
-    })
+    });
   };
 
   var getSignature = function(userId, dashboardId) {
@@ -31,7 +31,7 @@ helper.factory('RequestFactory', function($http) {
     })
     .then(function(res) {
       return res.data;
-    })
+    });
   };
 
   var postDashboard = function(newDashboard) {
@@ -47,5 +47,5 @@ helper.factory('RequestFactory', function($http) {
     getAllDashboards: getAllDashboards,
     getSignature: getSignature,
     postDashboard: postDashboard
-  }
+  };
 });
