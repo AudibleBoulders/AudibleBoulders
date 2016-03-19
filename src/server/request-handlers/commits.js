@@ -43,7 +43,7 @@ module.exports = {
               throw new Error(err);
             }
             if (results[0].last_commit !== last_pulled_commit) {
-              var updateUptodateFalse = "UPDATE users_dashboards SET up_to_date='0', last_pulled_commit='" + last_pulled_commit + "' WHERE users_id='" + users_id.toString() + "' AND dashboards_id='" + dashboards_id.toString() + "';";
+              var updateUptodateFalse = "UPDATE users_dashboards SET set_up='1', up_to_date='0', last_pulled_commit='" + last_pulled_commit + "' WHERE users_id='" + users_id.toString() + "' AND dashboards_id='" + dashboards_id.toString() + "';";
               db.query(updateUptodateFalse, function (err, results) {
                 if (err) {
                   throw new Error(err);
@@ -51,7 +51,7 @@ module.exports = {
                 res.send(201);
               });
             } else {
-              var updateUptodateTrue = "UPDATE users_dashboards SET up_to_date='1', last_pulled_commit='" + last_pulled_commit +"' WHERE users_id='" + users_id.toString() + "' AND dashboards_id='" + dashboards_id.toString() + "';";
+              var updateUptodateTrue = "UPDATE users_dashboards SET set_up='1', up_to_date='1', last_pulled_commit='" + last_pulled_commit +"' WHERE users_id='" + users_id.toString() + "' AND dashboards_id='" + dashboards_id.toString() + "';";
               db.query(updateUptodateTrue, function (err, results) {
                 if (err) {
                   throw new Error(err);
