@@ -111,7 +111,7 @@ angular.module('add', [])
     var dashboardInfo = {org_name: repoObject.owner.login, repo_name: repoObject.name};
     RequestFactory.postDashboard(dashboardInfo)
     .then(function () {
-      emitJoinDash(dashboardInfo);
+      emitJoinDash(repoObject);
     });
   };
 }]);
