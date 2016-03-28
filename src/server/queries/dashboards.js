@@ -24,8 +24,7 @@ var dashboards = module.exports = promise.promisifyAll({
   },
   updateLastCommit: function (orgName, repoName, newSha1, newMsg, callback) {
     // no return value
-    var updateStr = "UPDATE dashboards SET last_commit_sha1='" + newSha1 + "', last_commit_msg='" + newMsg + "' WHERE org_name='" + orgName + "' AND repo_name='" + repoName + "';";
-    pool.query(updateStr, function (err, results) {
+    pool.query("UPDATE dashboards SET last_commit_sha1=?, last_commit_msg=? WHERE org_name=? AND repo_name=?", [newSha1, newMsg, orgName, repoName], function (err, results) {
       callback(err, results);
     });
   },
