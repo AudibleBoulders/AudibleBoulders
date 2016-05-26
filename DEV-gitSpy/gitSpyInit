@@ -23,3 +23,6 @@ fi
 createFile ./.git/hooks/post-rewrite ./gitSpy/scripts/gitspy "post-rewrite hook"
 createFile ./.git/hooks/post-commit ./gitSpy/scripts/gitspy "post-commit hook"
 createFile /usr/local/bin/spyupdate ./gitSpy/scripts/spyupdate "spyupdate bash script"
+
+# Setup user on GitSpy.com
+spyupdate
