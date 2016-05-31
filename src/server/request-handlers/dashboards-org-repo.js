@@ -68,47 +68,42 @@ module.exports = {
                   .then(function (commit) {
                     var parsedCommit = JSON.parse(commit.body);
                     var commitSha1 = parsedCommit.sha;
+                    var commitMsg = parsedCommit.commit.message;
                     // only use the first line of the commit message
-                    var commitMsg;
-                    if (parsedCommit.commit.message.indexOf('\n') === -1) {
-                      commitMsg = parsedCommit.commit.message;
-                    } else {
-                      commitMsg = parsedCommit.commit.message.substring(0, parsedCommit.commit.message.indexOf('\n'));
-                    }
-                    return dashboards.updateLastCommitAsync(orgName, repoName, commitSha1, commitMsg);
-                  })
-                  // attach full dashboard data to responseObject
-                  .then(function () {
-                    return dashboards.getOneAsync(orgName, repoName);
-                  })
-                  .then(function (dashboard) {
-                    responseObject.dashboard.last_commit_sha1 = dashboard.last_commit_sha1;
-                    responseObject.dashboard.last_commit_msg = dashboard.last_commit_msg;
+                    commitMsg = commitMsg.indexOf('\n') === -1 ?
+                      commitMsg : commitMsg.substring(0, commitMsg.indexOf('\n'));
+                    dashboards.updateLastCommitAsync(orgName, repoName, commitSha1, commitMsg);
+                    responseObject.dashboard.last_commit_sha1 = commitSha1;
+                    responseObject.dashboard.last_commit_msg = commitMsg;
                     // get all users belonging to this dashboard
                     return users.getDashboardUsersAsync(responseObject.dashboard.id);
                   })
                   .then(function (dashboardUsers) {
-                    var usersWithSigHashes = dashboardUsers;
-                    // get diffs for each user
-                    usersWithSigHashes.forEach(function (thisUser) {
-                      diffs.getAllAsync(thisUser.signature_hash)
-                        .then(function (diffsArray) {
-                          responseObject.users.push({
-                            github_id: thisUser.github_id,
-                            github_handle: thisUser.github_handle,
-                            github_name: thisUser.github_name,
-                            github_avatar: thisUser.github_avatar,
-                            set_up: thisUser.set_up,
-                            last_pulled_commit_sha1: thisUser.last_pulled_commit_sha1,
-                            last_pulled_commit_msg: thisUser.last_pulled_commit_msg,
-                            commit_branch: thisUser.commit_branch,
-                            diffs: diffsArray
-                          });
-                          if (responseObject.users.length === usersWithSigHashes.length) {
-                            res.json(responseObject);
-                          }
-                        });
+                    var sigHashArray = dashboardUsers.map(function (dashboardUser) {
+                      return dashboardUser.signature_hash;
                     });
+                    diffs.getAllFromUsersAsync(sigHashArray)
+                      .then(function (diffs) {
+                        dashboardUsers.forEach(function (dashboardUser) {
+                          var userDiffs = diffs.filter(function (diff) {
+                            return dashboardUser.signature_hash === diff.users_dashboards_signature_hash;
+                          }).map(function (diff) {
+                            return {file: diff.file, mod_type: diff.mod_type};
+                          });
+                          responseObject.users.push({
+                            github_id: dashboardUser.github_id,
+                            github_handle: dashboardUser.github_handle,
+                            github_name: dashboardUser.github_name,
+                            github_avatar: dashboardUser.github_avatar,
+                            set_up: dashboardUser.set_up,
+                            last_pulled_commit_sha1: dashboardUser.last_pulled_commit_sha1,
+                            last_pulled_commit_msg: dashboardUser.last_pulled_commit_msg,
+                            commit_branch: dashboardUser.commit_branch,
+                            diffs: userDiffs
+                          });
+                        });
+                        res.json(responseObject);
+                      });
                   })
                   .catch(function (e) {
                     console.error(e);

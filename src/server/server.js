@@ -51,7 +51,7 @@ io.on('connect', function (socket) {
         userObject.last_pulled_commit_msg = userdashboard.last_pulled_commit_msg;
         userObject.last_pulled_commit_sha1 = userdashboard.last_pulled_commit_sha1;
         var signatureHash = userdashboard.signature_hash;
-        return Diff.getAllAsync(signatureHash);
+        return Diff.getAllFromUsersAsync([signatureHash]);
       })
       .then(function (diff) {
         userObject.diffs = diff;

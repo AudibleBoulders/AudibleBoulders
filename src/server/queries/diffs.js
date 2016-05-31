@@ -18,30 +18,20 @@ var diffs = module.exports = promise.promisifyAll({
   addAll: function (signatureHash, diffsArray, callback) {
     // go through diffsArray and add a new record in diffs table for each, with users_dashboards_signature_hash set to signatureHash
     // no return value
-    var counter = {diffsInserted: 0};
-    // we use counter to determine when all diffs have been successfully inserted, so that we can invoke the callback at that point
-    // counter is an object instead of a number so that it will be mutable
-    // i.e. if the counter object changes in one asychronous query, it will also be changed in the other queries
     if (diffsArray.length === 0) {
       callback(null, 'Diffs inserted');
     }
-    for (var i = 0; i < diffsArray.length; i++) {
-      var diffObject = diffsArray[i];
-      pool.query('INSERT INTO diffs (file, mod_type, users_dashboards_signature_hash) VALUES (?, ?, ?)', [diffObject.file, diffObject.mod_type, signatureHash], function (err, results) {
-        if (err) {
-          callback(err, null);
-        } else {
-          counter.diffsInserted++;
-          if (counter.diffsInserted === diffsArray.length) {
-            callback(null, 'Diffs inserted');
-          }
-        }
-      });
-    }
+    var formattedDiffs = diffsArray.map(function (diff) {
+      return [diff.file, diff.mod_type, signatureHash];
+    });
+    pool.query('INSERT INTO diffs (file, mod_type, users_dashboards_signature_hash) VALUES ?', [formattedDiffs], function (err, results) {
+        callback(err, 'Diffs inserted');
+    });
   },
-  getAll: function (signatureHash, callback) {
-    // return an array of diff objects that have a matching users_dashboards_signature_hash
-    pool.query('SELECT * FROM diffs WHERE users_dashboards_signature_hash=?', [signatureHash], function (err, results) {
+  getAllFromUsers: function(signatureHashArray, callback) {
+    var queryStr = 'SELECT * FROM diffs WHERE users_dashboards_signature_hash=?' +
+      ' or users_dashboards_signature_hash=?'.repeat(signatureHashArray.length - 1);
+    pool.query(queryStr, signatureHashArray, function (err, results) {
       callback(err, results);
     });
   }

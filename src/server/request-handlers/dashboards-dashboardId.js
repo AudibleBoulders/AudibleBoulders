@@ -12,7 +12,7 @@ module.exports = {
 
     usersDashboards.getOneAsync(githubId, dashboards_id)
       .then(function (userDashboard) {
-        return diffs.getAllAsync(userDashboard.signature_hash);
+        return diffs.getAllFromUsersAsync([userDashboard.signature_hash]);
       })
       .then(function (userDiffs) {
         if (userDiffs.length > 0) {
